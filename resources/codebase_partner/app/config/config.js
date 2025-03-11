@@ -17,7 +17,7 @@ const secretName = "Mydbsecret";
 
 client.getSecretValue({SecretId: secretName}, function(err, data) {
     if (err) {
-      config.APP_DB_HOST = "localhost"
+      config.APP_DB_HOST = "db"
       config.APP_DB_NAME = "STUDENTS"
       config.APP_DB_PASSWORD = "student12"
       config.APP_DB_USER = "nodeapp"
