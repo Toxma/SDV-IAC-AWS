@@ -1,12 +1,12 @@
-module "ec2_old_instance" {
+module "webserver1" {
   source                      = "terraform-aws-modules/ec2-instance/aws"
   version                     = "~> 5.0"
-  name                        = "webserver_old"
+  name                        = "webserver1"
   ami                         = "ami-0e1bed4f06a3b463d"
   instance_type               = "t2.micro"
   key_name                    = "vockey"
   subnet_id                   = module.vpc.public_subnets[0]
-  vpc_security_group_ids      = [module.web_sg.security_group_id]
+  vpc_security_group_ids      = [module.web1_sg.security_group_id]
   associate_public_ip_address = true
   user_data                   = <<-EOF
               #!/bin/bash
@@ -22,15 +22,15 @@ module "ec2_old_instance" {
 }
 
 
-module "ec2_instance" {
+module "webserver2" {
   source                      = "terraform-aws-modules/ec2-instance/aws"
   version                     = "~> 5.0"
-  name                        = "webserver"
+  name                        = "webserver2"
   ami                         = "ami-0e1bed4f06a3b463d"
   instance_type               = "t2.micro"
   key_name                    = "vockey"
   subnet_id                   = module.vpc.public_subnets[0]
-  vpc_security_group_ids      = [module.web_sg.security_group_id]
+  vpc_security_group_ids      = [module.web2_sg.security_group_id]
   associate_public_ip_address = true
   user_data                   = <<-EOF
               #!/bin/bash -xe

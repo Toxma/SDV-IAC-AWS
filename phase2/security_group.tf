@@ -1,8 +1,21 @@
-module "web_sg" {
+module "web1_sg" {
   source              = "terraform-aws-modules/security-group/aws//modules/web"
   version             = "5.3.0"
   vpc_id              = module.vpc.vpc_id
   name                = "web-sg"
+  description         = "Security group for web access"
+  ingress_cidr_blocks = ["0.0.0.0/0"]
+  tags = {
+    Name      = "web1-sg"
+    Terraform = "true"
+  }
+}
+
+module "web2_sg" {
+  source              = "terraform-aws-modules/security-group/aws//modules/web"
+  version             = "5.3.0"
+  vpc_id              = module.vpc.vpc_id
+  name                = "web2-sg"
   description         = "Security group for web access"
   ingress_cidr_blocks = ["0.0.0.0/0"]
   egress_with_cidr_blocks = [
