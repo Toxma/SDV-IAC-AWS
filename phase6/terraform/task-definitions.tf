@@ -18,8 +18,9 @@ resource "aws_ecs_task_definition" "app-task" {
 
   container_definitions = jsonencode([
     {
-      name = "${var.project}-${var.env}-app",
-      image : "${module.ecr.repository_url}:${data.aws_ecr_image.service_image.image_digest}",
+      name  = "${var.project}-${var.env}-app",
+      image = "${module.ecr.repository_url}@${data.aws_ecr_image.service_image.image_digest}"
+
       essential = true,
       logConfiguration = {
         logDriver = "awslogs",
