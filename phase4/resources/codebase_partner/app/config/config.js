@@ -22,7 +22,7 @@ client.getSecretValue({SecretId: secretName}, function(err, data) {
       config.APP_DB_PASSWORD = "student12"
       config.APP_DB_USER = "nodeapp"
       console.log('Secrets not found. Proceeding with default values..')
-      throw err;
+      // throw err;
     }
     else {
         if ('SecretString' in data) {
