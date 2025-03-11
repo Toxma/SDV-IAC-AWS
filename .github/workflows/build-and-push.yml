@@ -4,7 +4,7 @@ on:
   workflow_dispatch: # Manually trigger the workflow
 
 env:
-  ECR_REPOSITORY: example-university-prod-ecr
+  ECR_REPOSITORY: example-university-ecr
   AWS_REGION: us-east-1
 
 jobs:
