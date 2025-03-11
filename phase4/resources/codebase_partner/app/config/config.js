@@ -11,7 +11,7 @@ var client = new AWS.SecretsManager({
     region: "us-east-1"
 });
 
-const secretName = "Mydbsecret";
+const secretName = "mydbsecret";
 
 //let APP_DB_USER;
 
