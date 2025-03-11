@@ -35,5 +35,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          context: phase4/
           push: true
           tags: ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
