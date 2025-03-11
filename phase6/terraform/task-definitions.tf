@@ -65,7 +65,7 @@ resource "aws_secretsmanager_secret_version" "mydbsecret" {
   secret_string = jsonencode({
     user     = "nodeapp"
     password = "student12"
-    host     = "db"
+    host     = module.aurora_mysql.cluster_endpoint
     db       = "STUDENTS"
   })
 }

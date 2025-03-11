@@ -54,7 +54,6 @@ resource "aws_lb_target_group" "app_tg" {
     protocol = "HTTP"
     matcher  = "200"
     port     = 80
-    path     = "/index.php"
-
+    path     = "/"
   }
 }

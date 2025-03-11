@@ -3,8 +3,7 @@
 ################################
 resource "random_password" "aurora_mysql_master_password" {
   length           = 16
-  special          = true
-  override_special = "_%@"
+  special          = false
 }
 
 resource "aws_kms_key" "aurora_kms_key" {

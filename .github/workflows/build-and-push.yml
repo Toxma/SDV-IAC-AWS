@@ -35,4 +35,4 @@ jobs:
         with:
           context: phase4/
           push: true
-          tags: ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          tags: ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }},${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
