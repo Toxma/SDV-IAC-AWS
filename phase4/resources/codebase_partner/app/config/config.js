@@ -7,7 +7,10 @@ const config = {
   APP_DB_HOST: process.env.APP_DB_HOST || "",
   APP_DB_USER: process.env.APP_DB_USER || "",
   APP_DB_PASSWORD: process.env.APP_DB_PASSWORD || "",
-  APP_DB_NAME: process.env.APP_DB_NAME || ""
+  APP_DB_NAME: process.env.APP_DB_NAME || "",
+  APP_PORT: process.env.APP_PORT || 80,
+  INIT_DB_USER: process.env.INIT_DB_USER || "",
+  INIT_DB_PASSWORD: process.env.INIT_DB_PASSWORD || "",
 };
 
 // Log notice for any config using default values

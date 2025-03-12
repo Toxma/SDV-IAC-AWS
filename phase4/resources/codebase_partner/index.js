@@ -5,6 +5,10 @@ const supplier = require("./app/controller/supplier.controller");
 const app = express();
 const mustacheExpress = require("mustache-express")
 const favicon = require('serve-favicon');
+const { initializeDatabase } = require('./app/config/dbInit');
+
+// init database
+initializeDatabase();
 
 // parse requests of content-type: application/json
 app.use(bodyParser.json());

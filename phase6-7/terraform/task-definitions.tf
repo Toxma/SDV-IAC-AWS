@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "app-task" {
         },
         {
           name  = "APP_DB_PASSWORD",
-          value = module.aurora_mysql.cluster_master_user_secret
+          value = "student12"
         },
         {
           name  = "APP_DB_HOST",
@@ -46,8 +46,18 @@ resource "aws_ecs_task_definition" "app-task" {
         },
         {
           name  = "APP_DB_NAME",
-          value = "STUDENTS"
+          value = "students"
+        },
+        {
+          name  = "INIT_DB_USER",
+          value = module.aurora_mysql.cluster_master_username
+        },
+        {
+          name  = "INIT_DB_PASSWORD",
+          value = module.aurora_mysql.cluster_master_user_secret
         }
+
+
       ],
       secrets = [
       ],
