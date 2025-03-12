@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "app-task" {
         },
         {
           name  = "APP_DB_PASSWORD",
-          value = module.aurora_mysql.master_password
+          value = module.aurora_mysql.cluster_master_user_secret
         },
         {
           name  = "APP_DB_HOST",
