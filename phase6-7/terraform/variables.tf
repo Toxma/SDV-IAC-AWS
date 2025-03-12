@@ -68,7 +68,7 @@ variable "authorized_cidr_blocks" {
 variable "db_name" {
   description = "The name of the RDS database"
   type        = string
-  default     = "wordpress"
+  default     = "students"
 }
 
 variable "db_username" {

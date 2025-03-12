@@ -38,8 +38,7 @@ module "aurora_mysql" {
   }
 
   master_username             = "root"
-  manage_master_user_password = false
-  master_password             = random_password.aurora_mysql_master_password.result
+  manage_master_user_password = true
 
   storage_encrypted = true
   kms_key_id        = aws_kms_key.aurora_kms_key.arn

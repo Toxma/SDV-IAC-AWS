@@ -33,4 +33,4 @@ jobs:
       - name: terraform apply
         uses: dflook/terraform-apply@v1
         with:
-          path: phase6/terraform
+          path: phase6-7/terraform

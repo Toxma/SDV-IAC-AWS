@@ -32,6 +32,22 @@ resource "aws_ecs_task_definition" "app-task" {
         }
       },
       environment = [
+        {
+          name  = "APP_DB_USER",
+          value = "nodeapp"
+        },
+        {
+          name  = "APP_DB_PASSWORD",
+          value = module.aurora_mysql.master_password
+        },
+        {
+          name  = "APP_DB_HOST",
+          value = module.aurora_mysql.cluster_endpoint
+        },
+        {
+          name  = "APP_DB_NAME",
+          value = "STUDENTS"
+        }
       ],
       secrets = [
       ],
@@ -47,26 +63,3 @@ resource "aws_ecs_task_definition" "app-task" {
     ignore_changes = [container_definitions.image] // let AutoDevops pipeline update the image task
   } */
 }
-
-/*
-Has to be filled in manually by user once infrastructure is applied :
-{
-"username": "gitlab-ci-token",
-"password": "your_personal_access_token_here"
-}
-*/
-
-resource "aws_secretsmanager_secret" "mydbsecret" {
-  name = "mydbsecret"
-}
-
-resource "aws_secretsmanager_secret_version" "mydbsecret" {
-  secret_id = aws_secretsmanager_secret.mydbsecret.id
-  secret_string = jsonencode({
-    user     = "nodeapp"
-    password = "student12"
-    host     = module.aurora_mysql.cluster_endpoint
-    db       = "STUDENTS"
-  })
-}
-

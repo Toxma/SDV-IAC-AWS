@@ -1,11 +1,7 @@
 name: Build and Push to ECR
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'phase4/resources/**'
+  workflow_dispatch: # Manually trigger the workflow
 
 env:
   ECR_REPOSITORY: example-university-ecr
@@ -26,6 +22,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # unsecure, for POC purposes
           aws-region: ${{ env.AWS_REGION }}
 
+        
       - name: Login to Amazon ECR
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2

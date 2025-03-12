@@ -29,4 +29,4 @@ jobs:
       - name: terraform plan
         uses: dflook/terraform-plan@v1
         with:
-          path: phase6/terraform
+          path: phase6-7/terraform
