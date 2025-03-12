@@ -79,3 +79,4 @@ resource "aws_appautoscaling_policy" "dev_to_cpu" {
     target_value = 60
   }
 }
+
