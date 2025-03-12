@@ -1,0 +1,5 @@
+module "key_pair" {
+  source     = "terraform-aws-modules/key-pair/aws"
+  key_name   = "mz-key"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC8qIsC10oS4cx8rdNMyKu/SENvHU0neab19pQZbvqdKYzv/k5o9EIsUuI0V6Y4LclX7/2bh/NGYlXii7yVDAT208gFUnZoZRSLoa/XAYrC5ZU1YYpBcrz5kJGUpPCtXyhREJa2tVVcartDUBK1Q5rKDT+Ww6L1nQvFdHiAHDfhpBXQflPfdM+C9MMyMX3mGtL8Ru/wGSeWKQnqaqlMDdyyGfjJRJl3xCCZmYtwpBRp35grBn9phTWyOaI0nPj36tNasbj8cSw1BGHJ0/chxGETfIkQ9QMuT8rSqGTp2HLejOHfrvcQ5RybjvmK+YOHq1shY5Ogb6dM48zMYngsIwyjUWYuKqob9FxgNaEZ0AZJVWSjGnXygak7HuZlLtJbgaY0ZP/mctTjNQ658ixbwfFBHSBC8DaCUPI/8ZizIl6viPaFxpB0qyCbKRHU7S+vAH5iyO1wRzcZVDI/1Or7A8bcKzauZm6JDzbiT1P+2oN1lMmWOINeFWtNSBtX4bI1gY8= matteoz@zdell"
+}

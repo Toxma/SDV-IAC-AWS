@@ -18,9 +18,6 @@ module "vpc" {
 
   enable_nat_gateway = true
   single_nat_gateway = true
-  nat_gateway_tags = {
-    Name = "NAT GW"
-  }
 
   public_subnet_tags = {
     Name = "VPC Public Subnets"
