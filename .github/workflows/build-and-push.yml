@@ -1,7 +1,12 @@
 name: Build and Push to ECR
 
 on:
-  workflow_dispatch: # Manually trigger the workflow
+  push:
+    branches:
+      - main
+    paths:
+      - 'phase4/resources/**'
+  workflow_dispatch:
 
 env:
   ECR_REPOSITORY: example-university-ecr
@@ -35,4 +40,8 @@ jobs:
         with:
           context: phase4/
           push: true
-          tags: ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          tags: ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }},${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+      
+      - name: Update ECS Service
+        run: |
+          aws ecs update-service --cluster example-university-ecs-cluster --service example-university-ecs-service --force-new-deployment --region ${{ env.AWS_REGION }}
