@@ -60,7 +60,7 @@ resource "aws_ecs_task_definition" "app-task" {
       secrets = [
         {
           name      = "INIT_DB_PASSWORD"
-          valueFrom = module.aurora_mysql.cluster_master_user_secret[0].secret_arn
+          valueFrom = "${module.aurora_mysql.cluster_master_user_secret[0].secret_arn}:password::"
         }
       ],
       portMappings = [
