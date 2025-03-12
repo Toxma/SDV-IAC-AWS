@@ -53,9 +53,9 @@ jobs:
       
       - name: Setup K6
         uses: grafana/setup-k6-action@v1
-
-      - name: Run K6 Load Test Locally
-        run: k6 run .github/workflows/scripts/k6-test.js
+      
+      - name: Run K6 Load Test
+        run: k6 run k6/load-test.js
         env:
           URL: ${{ github.event.inputs.url }}
           RAMP_UP: ${{ github.event.inputs.ramp_up }}
@@ -89,9 +89,3 @@ jobs:
           echo "- Ramp-down: ${{ github.event.inputs.ramp_down }}s" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Please download the HTML report artifact for detailed results." >> $GITHUB_STEP_SUMMARY
-          
-          if [[ "${{ github.event.inputs.use_grafana_cloud }}" == "true" ]]; then
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "This test was run on Grafana Cloud K6." >> $GITHUB_STEP_SUMMARY
-            echo "You can view detailed results in your Grafana Cloud dashboard." >> $GITHUB_STEP_SUMMARY
-          fi

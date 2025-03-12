@@ -47,10 +47,10 @@ export default function () {
 
     check(response, {
         'is status 200': (r) => r.status === 200,
-    `transaction time < ${THRESHOLD_REQ_DURATION}ms`: (r) => r.timings.duration < THRESHOLD_REQ_DURATION,
-  });
+        [`transaction time < ${THRESHOLD_REQ_DURATION}ms`]: (r) => r.timings.duration < THRESHOLD_REQ_DURATION,
+    });
 
-sleep(1);
+    sleep(1);
 }
 
 export function handleSummary(data) {
