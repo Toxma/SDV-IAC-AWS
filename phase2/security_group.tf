@@ -11,6 +11,20 @@ module "web1_sg" {
   }
 }
 
+module "mysql_sg" {
+  source              = "terraform-aws-modules/security-group/aws//modules/mysql"
+  version             = "5.3.0"
+  vpc_id              = module.vpc.vpc_id
+  name                = "mysql-sg"
+  description         = "Security group for MySQL access"
+  ingress_cidr_blocks = ["10.0.1.0/24"]
+  tags = {
+    Name      = "mysql-sg"
+    Terraform = "true"
+  }
+}
+
+
 module "web2_sg" {
   source              = "terraform-aws-modules/security-group/aws//modules/web"
   version             = "5.3.0"

@@ -6,7 +6,7 @@ module "webserver1" {
   instance_type               = "t2.micro"
   key_name                    = "vockey"
   subnet_id                   = module.vpc.public_subnets[0]
-  vpc_security_group_ids      = [module.web1_sg.security_group_id]
+  vpc_security_group_ids      = [module.web1_sg.security_group_id, module.mysql_sg.security_group_id]
   associate_public_ip_address = true
   user_data                   = <<-EOF
               #!/bin/bash
@@ -16,11 +16,10 @@ module "webserver1" {
               ./UserdataScript-phase-2.sh
               EOF
   tags = {
-    Name      = "webserver"
+    Name      = "webserver1"
     Terraform = "true"
   }
 }
-
 
 module "webserver2" {
   source                      = "terraform-aws-modules/ec2-instance/aws"
@@ -31,6 +30,7 @@ module "webserver2" {
   key_name                    = "vockey"
   subnet_id                   = module.vpc.public_subnets[0]
   vpc_security_group_ids      = [module.web2_sg.security_group_id]
+  iam_instance_profile        = aws_iam_instance_profile.ecs_instance_profile.name
   associate_public_ip_address = true
   user_data                   = <<-EOF
               #!/bin/bash -xe
@@ -51,7 +51,12 @@ module "webserver2" {
               chmod +x /etc/rc.local
               EOF
   tags = {
-    Name      = "webserver"
+    Name      = "webserver2"
     Terraform = "true"
   }
+}
+
+resource "aws_iam_instance_profile" "ecs_instance_profile" {
+  name = "ecs-instance-profile"
+  role = data.aws_iam_role.labrole.name
 }
