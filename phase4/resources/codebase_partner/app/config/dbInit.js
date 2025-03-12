@@ -10,8 +10,8 @@ function initializeDatabase(maxRetries = 10, initialDelay = 1000) {
         function attemptConnection() {
             const connection = mysql.createConnection({
                 host: config.APP_DB_HOST,
-                user: config.INIT_DB_USER,
-                password: config.INIT_DB_PASSWORD,
+                user: config.APP_DB_USER,
+                password: config.APP_DB_PASSWORD,
                 multipleStatements: true,
                 connectTimeout: 10000,
                 // Add this parameter

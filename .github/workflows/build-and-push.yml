@@ -44,4 +44,4 @@ jobs:
       
       - name: Update ECS Service
         run: |
-          aws ecs update-service --cluster example-university-ecs-cluster --service example-university-ecs-service --force-new-deployment --region ${{ env.AWS_REGION }}
+          aws ecs update-service --cluster example-university-prod-ecs --service example-university-prod-app --force-new-deployment --region ${{ env.AWS_REGION }}

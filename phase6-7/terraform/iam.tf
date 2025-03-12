@@ -44,7 +44,7 @@ resource "aws_iam_role_policy" "ecs_secrets_access" {
       {
         Effect   = "Allow"
         Action   = "secretsmanager:GetSecretValue"
-        Resource = module.aurora_mysql.cluster_master_user_secret[0].secret_arn
+        Resource = module.aurora_mysql.db_instance_master_user_secret_arn
       }
     ]
   })
