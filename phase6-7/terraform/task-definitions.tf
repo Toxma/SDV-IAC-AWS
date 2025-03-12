@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "app-task" {
         },
         {
           name  = "APP_DB_HOST",
-          value = module.aurora_mysql.cluster_endpoint
+          value = tostring(module.aurora_mysql.cluster_endpoint)
         },
         {
           name  = "APP_DB_NAME",
@@ -50,14 +50,12 @@ resource "aws_ecs_task_definition" "app-task" {
         },
         {
           name  = "INIT_DB_USER",
-          value = module.aurora_mysql.cluster_master_username
+          value = tostring(module.aurora_mysql.cluster_master_username)
         },
         {
           name  = "INIT_DB_PASSWORD",
-          value = module.aurora_mysql.cluster_master_user_secret
+          value = tostring(module.aurora_mysql.cluster_master_password)
         }
-
-
       ],
       secrets = [
       ],
