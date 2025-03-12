@@ -1,0 +1,199 @@
+name: K6 Load Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'URL to load test'
+        required: true
+        type: string
+      duration:
+        description: 'Test duration in seconds'
+        required: false
+        default: '30'
+        type: string
+      virtual_users:
+        description: 'Number of virtual users'
+        required: false
+        default: '10'
+        type: string
+      ramp_up:
+        description: 'Ramp-up time in seconds'
+        required: false
+        default: '15'
+        type: string
+      steady_state:
+        description: 'Steady state time in seconds'
+        required: false
+        default: '30'
+        type: string
+      ramp_down:
+        description: 'Ramp-down time in seconds'
+        required: false
+        default: '15'
+        type: string
+      threshold_req_duration:
+        description: 'Request duration threshold in ms'
+        required: false
+        default: '1000'
+        type: string
+      threshold_req_failed:
+        description: 'Request failure rate threshold'
+        required: false
+        default: '0.01'
+        type: string
+      use_grafana_cloud:
+        description: 'Use Grafana Cloud for test execution and results'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  k6_load_test:
+    name: K6 Load Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup K6
+        uses: grafana/setup-k6-action@v1
+        
+      - name: Create K6 Test Script
+        run: |
+          cat << EOF > load_test.js
+          import http from 'k6/http';
+          import { check, sleep } from 'k6';
+          import { htmlReport } from 'https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js';
+          import { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
+          import { Trend } from 'k6/metrics';
+
+          // Read environment variables
+          const URL = __ENV.URL || 'https://test.k6.io';
+          const RAMP_UP = parseInt(__ENV.RAMP_UP || '15');
+          const STEADY_STATE = parseInt(__ENV.STEADY_STATE || '30');
+          const RAMP_DOWN = parseInt(__ENV.RAMP_DOWN || '15');
+          const VIRTUAL_USERS = parseInt(__ENV.VIRTUAL_USERS || '10');
+          const THRESHOLD_REQ_DURATION = parseInt(__ENV.THRESHOLD_REQ_DURATION || '1000');
+          const THRESHOLD_REQ_FAILED = parseFloat(__ENV.THRESHOLD_REQ_FAILED || '0.01');
+          const USE_GRAFANA_CLOUD = __ENV.USE_GRAFANA_CLOUD === 'true';
+
+          // Custom metrics
+          const customMetrics = {
+            responseTime: new Trend('response_time'),
+          };
+
+          export let options = {
+            stages: [
+              { duration: RAMP_UP + 's', target: VIRTUAL_USERS },
+              { duration: STEADY_STATE + 's', target: VIRTUAL_USERS },
+              { duration: RAMP_DOWN + 's', target: 0 },
+            ],
+            thresholds: {
+              'http_req_failed': ['rate<' + THRESHOLD_REQ_FAILED],
+              'http_req_duration': ['p(95)<' + THRESHOLD_REQ_DURATION],
+              'response_time': ['avg<' + THRESHOLD_REQ_DURATION],
+            },
+          };
+
+          // Add Grafana Cloud output if enabled
+          if (USE_GRAFANA_CLOUD) {
+            options.ext = {
+              loadimpact: {
+                projectID: __ENV.GRAFANA_CLOUD_PROJECT_ID,
+                // Optional: Name the test
+                name: 'URL Load Test: ' + URL
+              }
+            };
+          }
+
+          export default function() {
+            const startTime = new Date().getTime();
+            
+            // Add a timestamp to avoid caching
+            const testUrl = URL.includes('?') 
+              ? URL + '&timestamp=' + startTime 
+              : URL + '?timestamp=' + startTime;
+            
+            let response = http.get(testUrl);
+            
+            const endTime = new Date().getTime();
+            const duration = endTime - startTime;
+            customMetrics.responseTime.add(duration);
+            
+            check(response, {
+              'is status 200': (r) => r.status === 200,
+              'transaction time < ' + THRESHOLD_REQ_DURATION + 'ms': (r) => r.timings.duration < THRESHOLD_REQ_DURATION,
+            });
+            
+            sleep(1);
+          }
+
+          export function handleSummary(data) {
+            const timestamp = new Date().toISOString().replace(/:/g, '-');
+            return {
+              'summary-' + timestamp + '.html': htmlReport(data),
+              'summary-' + timestamp + '.json': JSON.stringify(data),
+              'stdout': textSummary(data, { indent: ' ', enableColors: true }),
+            };
+          }
+          EOF
+      
+      - name: Run K6 Load Test Locally
+        if: ${{ !github.event.inputs.use_grafana_cloud }}
+        run: k6 run load_test.js
+        env:
+          URL: ${{ github.event.inputs.url }}
+          RAMP_UP: ${{ github.event.inputs.ramp_up }}
+          STEADY_STATE: ${{ github.event.inputs.steady_state }}
+          RAMP_DOWN: ${{ github.event.inputs.ramp_down }}
+          VIRTUAL_USERS: ${{ github.event.inputs.virtual_users }}
+          THRESHOLD_REQ_DURATION: ${{ github.event.inputs.threshold_req_duration }}
+          THRESHOLD_REQ_FAILED: ${{ github.event.inputs.threshold_req_failed }}
+          USE_GRAFANA_CLOUD: "false"
+      
+      - name: Run K6 Load Test on Grafana Cloud
+        if: ${{ github.event.inputs.use_grafana_cloud }}
+        run: k6 cloud load_test.js
+        env:
+          URL: ${{ github.event.inputs.url }}
+          RAMP_UP: ${{ github.event.inputs.ramp_up }}
+          STEADY_STATE: ${{ github.event.inputs.steady_state }}
+          RAMP_DOWN: ${{ github.event.inputs.ramp_down }}
+          VIRTUAL_USERS: ${{ github.event.inputs.virtual_users }}
+          THRESHOLD_REQ_DURATION: ${{ github.event.inputs.threshold_req_duration }}
+          THRESHOLD_REQ_FAILED: ${{ github.event.inputs.threshold_req_failed }}
+          USE_GRAFANA_CLOUD: "true"
+          K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
+          GRAFANA_CLOUD_PROJECT_ID: ${{ secrets.GRAFANA_CLOUD_PROJECT_ID }}
+      
+      - name: List Generated Files
+        run: ls -la
+      
+      - name: Upload Test Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-load-test-report
+          path: |
+            summary-*.html
+            summary-*.json
+          retention-days: 30
+      
+      - name: Add Summary
+        run: |
+          echo "## K6 Load Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Tested URL:** ${{ github.event.inputs.url }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Virtual Users:** ${{ github.event.inputs.virtual_users }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Duration Settings:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Ramp-up: ${{ github.event.inputs.ramp_up }}s" >> $GITHUB_STEP_SUMMARY
+          echo "- Steady state: ${{ github.event.inputs.steady_state }}s" >> $GITHUB_STEP_SUMMARY
+          echo "- Ramp-down: ${{ github.event.inputs.ramp_down }}s" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Please download the HTML report artifact for detailed results." >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ github.event.inputs.use_grafana_cloud }}" == "true" ]]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "This test was run on Grafana Cloud K6." >> $GITHUB_STEP_SUMMARY
+            echo "You can view detailed results in your Grafana Cloud dashboard." >> $GITHUB_STEP_SUMMARY
+          fi
