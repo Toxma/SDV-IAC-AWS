@@ -34,11 +34,11 @@ resource "aws_ecs_task_definition" "app-task" {
       environment = [
         {
           name  = "APP_DB_USER",
-          value = "nodeapp"
+          value = tostring(module.aurora_mysql.db_instance_username)
         },
         {
           name  = "APP_DB_HOST",
-          value = tostring(module.aurora_mysql.cluster_endpoint)
+          value = tostring(module.aurora_mysql.db_instance_address)
         },
         {
           name  = "APP_DB_NAME",
@@ -49,10 +49,6 @@ resource "aws_ecs_task_definition" "app-task" {
           value = "80"
         },
         {
-          name  = "INIT_DB_USER",
-          value = tostring(module.aurora_mysql.cluster_master_username)
-        },
-        {
           name  = "APP_DB_PASSWORD"
           value = "student12"
         },
@@ -60,7 +56,7 @@ resource "aws_ecs_task_definition" "app-task" {
       secrets = [
         {
           name      = "INIT_DB_PASSWORD"
-          valueFrom = "${module.aurora_mysql.cluster_master_user_secret[0].secret_arn}:password::"
+          valueFrom = "${module.aurora_mysql.db_instance_master_user_secret_arn}:password::"
         }
       ],
       portMappings = [

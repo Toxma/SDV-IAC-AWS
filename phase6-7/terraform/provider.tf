@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "example-university-terraform-state"
+    bucket = "university-terraform-state"
     key    = "phase6/terraform/terraform.tfstate"
     region = "us-east-1"
   }

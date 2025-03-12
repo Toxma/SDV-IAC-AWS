@@ -1,63 +1,57 @@
 ################################
-# Postregresql Aurora Cluster 
+# MySQL RDS Cluster
 ################################
-resource "random_password" "aurora_mysql_master_password" {
-  length           = 16
-  special          = false
-}
-
-resource "aws_kms_key" "aurora_kms_key" {
-  description             = "CMK for Aurora MariaDB server side encryption"
-  deletion_window_in_days = 10
-  enable_key_rotation     = false
-}
-
-resource "aws_kms_alias" "aurora_kms_key_alias" {
-  name          = "alias/aurora-data-store-key"
-  target_key_id = aws_kms_key.aurora_kms_key.id
-}
-
 module "aurora_mysql" {
-  source  = "terraform-aws-modules/rds-aurora/aws"
-  version = "9.3.1"
+  source  = "terraform-aws-modules/rds/aws"
+  version = "6.10.0"
 
-  name          = join("-", [var.project, var.env, "aurora-mysql"])
-  database_name = var.db_name
+  identifier = join("-", [var.project, var.env, "mysql"])
 
-  engine         = "aurora-mysql"
+  username = "root"
+  db_name  = "students"
+
+  allocated_storage = 5
+
+  engine         = "mysql"
   engine_version = "8.0"
 
-  instance_class = "db.t3.medium"
+  major_engine_version = "8.0"
+  family               = "mysql8.0"
 
-  instances = {
-    one = {}
-  }
-  serverlessv2_scaling_configuration = {
-    min_capacity = 1
-    max_capacity = 2
-  }
+  instance_class = "db.t3.small"
 
-  master_username             = "root"
   manage_master_user_password = true
 
-  storage_encrypted = true
-  kms_key_id        = aws_kms_key.aurora_kms_key.arn
+  vpc_security_group_ids = [
+    aws_security_group.ecs_access_sg.id
+  ]
 
-  vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
-
-  security_group_rules = {
-    vpc_ingress = {
-      cidr_blocks = [module.vpc.vpc_cidr_block]
-      from_port   = 3306
-      to_port     = 3306
-      protocol    = "tcp"
-    }
-  }
 
   apply_immediately   = true
   skip_final_snapshot = true
 
   deletion_protection = false
 }
+
+resource "aws_security_group" "ecs_access_sg" {
+  name        = "${var.project}-${var.env}-ecs-access-sg"
+  description = "Security group to allow ECS access to RDS"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.service_security_group.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 
