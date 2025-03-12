@@ -48,14 +48,10 @@ resource "aws_ecs_task_definition" "app-task" {
           name  = "APP_PORT",
           value = "80"
         },
-        {
-          name  = "APP_DB_PASSWORD"
-          value = "student12"
-        },
       ],
       secrets = [
         {
-          name      = "INIT_DB_PASSWORD"
+          name      = "APP_DB_PASSWORD"
           valueFrom = "${module.aurora_mysql.db_instance_master_user_secret_arn}:password::"
         }
       ],
