@@ -42,11 +42,6 @@ on:
         required: false
         default: '0.01'
         type: string
-      use_grafana_cloud:
-        description: 'Use Grafana Cloud for test execution and results'
-        required: false
-        default: false
-        type: boolean
 
 jobs:
   k6_load_test:
@@ -140,7 +135,6 @@ jobs:
           EOF
       
       - name: Run K6 Load Test Locally
-        if: ${{ !github.event.inputs.use_grafana_cloud }}
         run: k6 run load_test.js
         env:
           URL: ${{ github.event.inputs.url }}
@@ -150,22 +144,6 @@ jobs:
           VIRTUAL_USERS: ${{ github.event.inputs.virtual_users }}
           THRESHOLD_REQ_DURATION: ${{ github.event.inputs.threshold_req_duration }}
           THRESHOLD_REQ_FAILED: ${{ github.event.inputs.threshold_req_failed }}
-          USE_GRAFANA_CLOUD: "false"
-      
-      - name: Run K6 Load Test on Grafana Cloud
-        if: ${{ github.event.inputs.use_grafana_cloud }}
-        run: k6 cloud load_test.js
-        env:
-          URL: ${{ github.event.inputs.url }}
-          RAMP_UP: ${{ github.event.inputs.ramp_up }}
-          STEADY_STATE: ${{ github.event.inputs.steady_state }}
-          RAMP_DOWN: ${{ github.event.inputs.ramp_down }}
-          VIRTUAL_USERS: ${{ github.event.inputs.virtual_users }}
-          THRESHOLD_REQ_DURATION: ${{ github.event.inputs.threshold_req_duration }}
-          THRESHOLD_REQ_FAILED: ${{ github.event.inputs.threshold_req_failed }}
-          USE_GRAFANA_CLOUD: "true"
-          K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
-          GRAFANA_CLOUD_PROJECT_ID: ${{ secrets.GRAFANA_CLOUD_PROJECT_ID }}
       
       - name: List Generated Files
         run: ls -la
