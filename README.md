@@ -2,6 +2,9 @@
 
 # Créer une application web hautement disponible et pouvant être mise à l'échelle avec Terraform
 
+![Terraform Version](https://img.shields.io/badge/Terraform-1.11.1-623CE4?logo=terraform&logoColor=white)
+![Node.js Version](https://img.shields.io/badge/Node.js-16-339933?logo=nodedotjs&logoColor=white)
+
 *Auteurs*: [Matteo ZINUTTI](https://www.linkedin.com/in/matteozinutti/) / [Fabien CHEVALIER](https://www.linkedin.com/in/fabche/)
 
 > [!IMPORTANT]
