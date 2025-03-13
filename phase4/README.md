@@ -8,6 +8,24 @@ L’objectif est de préparer l’application pour être facilement déployable.
 - Stocker l’image sur **Amazon Elastic Container Registry (ECR)** ou une autre regitry.
 - Tester l’exécution du package localement et sur une instance EC2.
 
+## Sommaire
+
+- [Packaging de l'application](#packaging-de-lapplication)
+  - [Objectif](#objectif)
+  - [Sommaire](#sommaire)
+  - [Schéma représentatif](#schéma-représentatif)
+  - [Réalisation](#réalisation)
+    - [Dockerfile](#dockerfile)
+      - [Modifications apportées au code source](#modifications-apportées-au-code-source)
+        - [Variables d'environnement](#variables-denvironnement)
+        - [Initialisation de la base de donnée](#initialisation-de-la-base-de-donnée)
+    - [ECR et déploiement](#ecr-et-déploiement)
+    - [Test de l'application](#test-de-lapplication)
+
+## Schéma représentatif
+
+![scheme](./assets/scheme.png)
+
 ## Réalisation
 
 ### Dockerfile
