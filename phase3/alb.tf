@@ -55,17 +55,24 @@ resource "aws_lb_target_group" "app_tg" {
     matcher  = "200"
     port     = 80
     path     = "/"
+    interval = 30
+    timeout  = 5
   }
 }
 
-resource "aws_lb_target_group_attachment" "app_attachment_web1" {
-  target_group_arn = aws_lb_target_group.app_tg.arn
-  target_id        = module.webserver1.id
-  port             = 80
-}
+# resource "aws_lb_target_group_attachment" "app_attachment_web1" {
+#   target_group_arn = aws_lb_target_group.app_tg.arn
+#   target_id        = module.webserver1.id
+#   port             = 80
+# }
 
-resource "aws_lb_target_group_attachment" "app_attachment_web2" {
-  target_group_arn = aws_lb_target_group.app_tg.arn
-  target_id        = module.webserver2.id
-  port             = 80
+# resource "aws_lb_target_group_attachment" "app_attachment_web2" {
+#   target_group_arn = aws_lb_target_group.app_tg.arn
+#   target_id        = module.webserver2.id
+#   port             = 80
+# }
+
+resource "aws_autoscaling_attachment" "app_attachment" {
+  autoscaling_group_name = aws_autoscaling_group.asg.id
+  lb_target_group_arn    = aws_lb_target_group.app_tg.arn
 }
