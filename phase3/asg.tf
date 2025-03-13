@@ -23,7 +23,10 @@ resource "aws_launch_template" "web" {
   placement {
     availability_zone = "us-east-1a"
   }
-  user_data = filebase64("${path.cwd}/user-data.sh")
+  iam_instance_profile {
+    name = aws_iam_instance_profile.ecs_instance_profile.name
+  }
+  user_data = filebase64("${path.cwd}/user-data-p3.sh")
 }
 
 resource "aws_autoscaling_group" "asg" {

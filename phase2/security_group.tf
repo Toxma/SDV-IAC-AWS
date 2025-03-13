@@ -47,23 +47,4 @@ module "web2_sg" {
   }
 }
 
-module "bdd_sg" {
-  source      = "terraform-aws-modules/security-group/aws"
-  version     = "5.3.0"
-  vpc_id      = module.vpc.vpc_id
-  name        = "bdd-sg"
-  description = "Complete MySQL example security group"
-  ingress_with_cidr_blocks = [
-    {
-      from_port   = 3306
-      to_port     = 3306
-      protocol    = "tcp"
-      description = "MySQL access from public subnet"
-      cidr_blocks = "10.0.1.0/24"
-    },
-  ]
-  tags = {
-    Name      = "bdd-sg"
-    Terraform = "true"
-  }
-}
+
