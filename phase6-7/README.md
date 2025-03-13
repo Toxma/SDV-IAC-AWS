@@ -70,7 +70,7 @@ Comme expliqué en partie 4, l'ensemble du packaging est effectué via le workfl
 
 Le choix à été fait de proposer un test de charge semi-automatique. En effet, il est nécessaire de récupérer le DNS public de l'Application Load Balancer afin de pouvoir effectuer le test.
 
-Ce test utilise l'outil `k6` et est déclenché via le workflow `k6-load-testing.yml`, manuellement par l'utilisateur : 
+Ce test utilise l'outil `k6` et est déclenché via le workflow `k6-load-testing.yml`, manuellement par l'utilisateur :
 
 ![Déclenchement du test de charge](./assets/loadtesting.png)
 
@@ -78,7 +78,9 @@ Les résultats du tests sont ensuite disponibles dans les logs de GitHub Actions
 
 ![Résultats du test de charge](./assets/results-loadtest.png)
 
-Un fichier HTML est également généré, permettant de visualiser les résultats du test de charge. Un example est disponible en [cliquant ici](./assets/summary.html).
+Un fichier HTML est également généré, permettant de visualiser les résultats du test de charge :
+
+![Résultats du test de charge](./assets/summary.png)
 
 ### Déploiement sur Amazon ECS
 
