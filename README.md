@@ -15,6 +15,7 @@
 - [Créer une application web hautement disponible et pouvant être mise à l'échelle avec Terraform](#créer-une-application-web-hautement-disponible-et-pouvant-être-mise-à-léchelle-avec-terraform)
   - [Scénario](#scénario)
   - [Organisation du projet](#organisation-du-projet)
+  - [Comment déployer la solution ECS : initialisation](#comment-déployer-la-solution-ecs--initialisation)
   - [License](#license)
 
 ## Scénario
@@ -39,6 +40,38 @@ Le rendu de se projet est documenté par parties, documentées dans les fichiers
 
 - [Phase 6-7 :  Mise en place d’une pipeline CI/CD - Ajout d’un orchestrateur de conteneurs](./phase6-7/README.md)
 - [Phase 8 : Amélioration et Optimisation](./phase8/README.md)
+
+## Comment déployer la solution ECS : initialisation
+
+- Forker le projet puis configurer les secrets GitHub suivants : 
+  - `AWS_ACCESS_KEY_ID`
+  - `AWS_SECRET_ACCESS_KEY`
+
+- S'authentifier via `aws cli` et créer le bucket S3 pour le stockage des fichiers Terraform : 
+  ```bash
+  aws s3api create-bucket --bucket university-example-terraform-state --region us-est-1
+  ```
+>[!NOTE]
+> Il sera peut être nécessaire de changer le nom du bucket (et de le mettre à jour dans les fichiers Terraform) si le nom est déjà pris.
+
+- Initialiser le repository Terraform ECR : 
+  ```bash
+  export AWS_PROFILE=<your_aws_profile>
+  cd phase6-7/terraform
+  terraform init && terraform apply -auto-approve -target=module.ecr
+  ```
+
+- Lancer le workflow Build and Push to ECR sur GitHub Actions (via la branche main)
+
+>[!WARNING]
+> Le dernier job du workflow ne fonctionnera pas, car l'infrastructure n'est pas encore totalement construite à cette étape.
+
+- Appliquer la configuration Terraform pour le déploiement de l'infrastructure ECS : 
+  ```bash
+  cd phase6-7/terraform && terraform apply -auto-approve
+  ```
+
+A présent, l'application est déployée sur ECS et accessible via le Load Balancer. Pour modifier/améliorer le code Terraform, une PR déclenchera un plan, puis un apply si la PR est mergée.
 
 ## License
 
