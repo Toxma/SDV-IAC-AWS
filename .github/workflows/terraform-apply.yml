@@ -1,9 +1,11 @@
 name: Apply terraform plan
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+    types:
+      - closed
     paths:
       - 'phase6-7/terraform/**'
 
@@ -15,7 +17,8 @@ env:
   AWS_REGION: us-east-1
 
 jobs:
-  apply: 
+  apply:
+    if: github.event.pull_request.merged == true 
     runs-on: ubuntu-latest
     name: Apply terraform plan
     env:

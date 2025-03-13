@@ -5,7 +5,14 @@
 *Auteurs*: [Matteo ZINUTTI](https://www.linkedin.com/in/matteozinutti/) / [Fabien CHEVALIER](https://www.linkedin.com/in/fabche/)
 
 > [!IMPORTANT]
-> Ce projet est réalisé dans le cadre de la formation [Master 2 Spécialisation DevOps, Infrastructure et Cloud](https://www.supdevinci.fr/formations/mastere-specialisation-devops/) à l'école SupDeVinci. Le sujet est disponible [ici](https://ready-player-school.notion.site/Projet-Cr-er-une-application-web-hautement-disponible-et-pouvant-tre-mise-l-chelle-avec-Terrafo-1b1f3a8bf3b6811caa40fd61f0f9a642).
+> Ce projet est réalisé dans le cadre de la formation [Master 2 Spécialisation DevOps, Infrastructure et Cloud](https://www.supdevinci.fr/formations/mastere-specialisation-devops/) à l'école SupDeVinci. Le sujet est disponible [ici](https://ready-player-school.notion.site/Projet-Cr-er-une-application-web-hautement-disponible-et-pouvant-tre-mise-l-chelle-avec-Terrafo-1b1f3a8bf3b6811caa40fd61f0f9a642). La durée de réalisation était de 4 jours.
+
+![App](./imgs/screenshot.png)
+
+- [Créer une application web hautement disponible et pouvant être mise à l'échelle avec Terraform](#créer-une-application-web-hautement-disponible-et-pouvant-être-mise-à-léchelle-avec-terraform)
+  - [Scénario](#scénario)
+  - [Organisation du projet](#organisation-du-projet)
+  - [License](#license)
 
 ## Scénario
 
@@ -23,6 +30,10 @@ Le rendu de se projet est documenté par parties, documentées dans les fichiers
 - [Phase 2 : Découplage des composants de l'application](./phase2/README.md)
 - [Phase 3 : Mise en œuvre de la haute disponibilité et de la capacité de mise à l'échelle élevée](./phase3/README.md)
 - [Phase 4 : Packaging de l'application](./phase4/README.md)
+
+> [!WARNING]
+> La phase 5 a été annulée par le formateur pour des raisons de faisabilité technique dans un environnement de formation.
+
 - [Phase 6-7 :  Mise en place d’une pipeline CI/CD - Ajout d’un orchestrateur de conteneurs](./phase6-7/README.md)
 - [Phase 8 : Amélioration et Optimisation](./phase8/README.md)
 
