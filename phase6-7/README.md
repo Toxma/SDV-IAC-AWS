@@ -64,7 +64,7 @@ Le choix à été porté vers l'utilisation d'actions managées par GitHub, afin
 
 #### Packaging et push de l'image Docker
 
-Comme expliqué en partie 4, l'ensemble du packaging est effectué via le workflow `build-and-push.ml`. Ce dernier est déclenché si des modifications ont été effectuées sur le répertoire `./resources/` situé dans le dossier partie 4.
+Comme expliqué en partie 4, l'ensemble du packaging est effectué via le workflow `build-and-push.yml`. Ce dernier est déclenché si des modifications ont été effectuées sur le répertoire `./resources/` situé dans le dossier partie 4.
 
 #### Test de charge
 
