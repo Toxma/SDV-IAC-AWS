@@ -5,7 +5,9 @@
 *Auteurs*: [Matteo ZINUTTI](https://www.linkedin.com/in/matteozinutti/) / [Fabien CHEVALIER](https://www.linkedin.com/in/fabche/)
 
 > [!IMPORTANT]
-> Ce projet est réalisé dans le cadre de la formation [Master 2 Spécialisation DevOps, Infrastructure et Cloud](https://www.supdevinci.fr/formations/mastere-specialisation-devops/) à l'école SupDeVinci. Le sujet est disponible [ici](https://ready-player-school.notion.site/Projet-Cr-er-une-application-web-hautement-disponible-et-pouvant-tre-mise-l-chelle-avec-Terrafo-1b1f3a8bf3b6811caa40fd61f0f9a642).
+> Ce projet est réalisé dans le cadre de la formation [Master 2 Spécialisation DevOps, Infrastructure et Cloud](https://www.supdevinci.fr/formations/mastere-specialisation-devops/) à l'école SupDeVinci. Le sujet est disponible [ici](https://ready-player-school.notion.site/Projet-Cr-er-une-application-web-hautement-disponible-et-pouvant-tre-mise-l-chelle-avec-Terrafo-1b1f3a8bf3b6811caa40fd61f0f9a642). La durée de réalisation était de 4 jours.
+
+![App](./imgs/screenshot.png)
 
 - [Créer une application web hautement disponible et pouvant être mise à l'échelle avec Terraform](#créer-une-application-web-hautement-disponible-et-pouvant-être-mise-à-léchelle-avec-terraform)
   - [Scénario](#scénario)
