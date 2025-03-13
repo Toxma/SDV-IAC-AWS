@@ -1,6 +1,9 @@
 name: Create terraform plan
 
-on: [pull_request]
+on:
+  pull_request:
+    paths:
+      - 'phase6-7/terraform/**'
 
 permissions:
   contents: read

@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'phase6-7/terraform/**'
 
 permissions:
   contents: read
