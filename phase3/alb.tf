@@ -1,31 +1,71 @@
-module "alb" {
-  source             = "terraform-aws-modules/alb/aws"
-  version            = "~> 9.13.0"
+##################
+# Security groups
+##################
+resource "aws_security_group" "alb_sg" {
+  name        = "${local.name}-lb-sg"
+  description = "Allow incoming traffic"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+##################
+# ALB
+##################
+resource "aws_lb" "alb" {
   name               = "${local.name}-alb"
+  internal           = false
   load_balancer_type = "application"
-  vpc_id             = module.vpc.vpc_id
+  security_groups    = [aws_security_group.alb_sg.id]
   subnets            = module.vpc.public_subnets
+}
 
-  security_group_ingress_rules = {
-    all_http = {
-      from_port   = 80
-      to_port     = 80
-      ip_protocol = "tcp"
-      description = "HTTP web traffic"
-      cidr_ipv4   = "0.0.0.0/0"
-    }
-  }
+// app listener
+resource "aws_lb_listener" "app_listener" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = "80"
+  protocol          = "HTTP"
 
-  security_group_egress_rules = {
-    all = {
-      ip_protocol = "-1"
-      cidr_ipv4   = "10.0.0.0/16"
-    }
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.app_tg.arn
   }
+}
 
-  enable_deletion_protection = false
-  tags = {
-    Environment = "Dev"
-    Terraform   = "True"
+resource "aws_lb_target_group" "app_tg" {
+  name        = "${local.name}-tg-wp"
+  target_type = "instance"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = module.vpc.vpc_id
+  health_check {
+    protocol = "HTTP"
+    matcher  = "200"
+    port     = 80
+    path     = "/"
   }
+}
+
+resource "aws_lb_target_group_attachment" "app_attachment_web1" {
+  target_group_arn = aws_lb_target_group.app_tg.arn
+  target_id        = module.webserver1.id
+  port             = 80
+}
+
+resource "aws_lb_target_group_attachment" "app_attachment_web2" {
+  target_group_arn = aws_lb_target_group.app_tg.arn
+  target_id        = module.webserver2.id
+  port             = 80
 }
